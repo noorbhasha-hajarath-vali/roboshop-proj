@@ -11,7 +11,7 @@ do
     --key-name devops \
     --security-group-ids $SG_ID \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE}]" \
-    --query 'Instances[0].InstanceId' \
+    --query 'Instances[*].InstanceId' \
     --output text)
 
     if [ $INSTANCE != "frontend" ]; then
