@@ -24,3 +24,4 @@ ZONE_ID=$(aws route53 list-hosted-zones-by-name \
         ZONE_ID=${ZONE_ID##*/}
     fi
 
+    echo "$ZONE_ID"
