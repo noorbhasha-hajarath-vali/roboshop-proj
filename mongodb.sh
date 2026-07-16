@@ -1,6 +1,9 @@
 #!/bin/bash
 
-source ./common.sh
+LOG_DIR="/var/log/shell-roboshop"
+
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+source "$SCRIPT_DIR/common.sh"
 
 CHECK_ROOT
 
@@ -15,11 +18,5 @@ VALIDATE $? "Enable MongoDB"
 
 systemctl start mongod
 VALIDATE $? "Start MongoDB"
-
-sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf
-VALIDATE $? "Update MongoDB Config"
-
-systemctl restart mongod
-VALIDATE $? "Restart MongoDB"
 
 COMPLETE

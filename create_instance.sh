@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./common.sh
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+source "$SCRIPT_DIR/common.sh"
 
 AMI_ID="ami-002192a70217ac181"
 SG_ID="sg-014ee579326daf5b9"
@@ -8,7 +9,7 @@ DOMAIN="ayri.fun"
 
 for INSTANCE in "$@"
 do
-    echo
+    echo "Creating Instance : $INSTANCE" >&3
     echo "Creating Instance : $INSTANCE"
 
     INSTANCE_ID=$(aws ec2 run-instances \
@@ -20,10 +21,10 @@ do
         --query 'Instances[0].InstanceId' \
         --output text)
 
-    echo "Instance ID : $INSTANCE_ID"
+    VALIDATE $? "Create EC2 Instance"
 
-    aws ec2 wait instance-running \
-        --instance-ids "$INSTANCE_ID"
+    aws ec2 wait instance-running --instance-ids "$INSTANCE_ID"
+    VALIDATE $? "Wait for Instance"
 
     if [ "$INSTANCE" = "frontend" ]; then
         IP=$(aws ec2 describe-instances \
@@ -41,7 +42,7 @@ do
         RECORD_NAME="$INSTANCE.$DOMAIN"
     fi
 
-    echo "IP Address  : $IP"
+    VALIDATE $? "Get Instance IP"
 
     ZONE_ID=$(aws route53 list-hosted-zones-by-name \
         --dns-name "$DOMAIN" \
@@ -49,8 +50,6 @@ do
         --output text)
 
     if [ "$ZONE_ID" = "None" ]; then
-        echo "Hosted Zone not found. Creating..."
-
         ZONE_ID=$(aws route53 create-hosted-zone \
             --name "$DOMAIN" \
             --caller-reference "$(date +%s)" \
@@ -79,12 +78,9 @@ EOF
 
     aws route53 change-resource-record-sets \
         --hosted-zone-id "$ZONE_ID" \
-        --change-batch file:///tmp/record.json >/dev/null
+        --change-batch file:///tmp/record.json
 
-    echo "DNS Updated : $RECORD_NAME -> $IP"
-    echo
+    VALIDATE $? "Create DNS Record"
 done
 
-echo "====================================================================="
-echo "Process Completed At : $(date '+%Y-%m-%d %H:%M:%S %Z')"
-echo "====================================================================="
+COMPLETE
