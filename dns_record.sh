@@ -77,3 +77,6 @@ aws route53 change-resource-record-sets \
     --change-batch file:///tmp/record.json
 
 echo "DNS record created/updated successfully."
+
+aws route53 list-resource-record-sets \
+    --hosted-zone-id "$ZONE_ID"
