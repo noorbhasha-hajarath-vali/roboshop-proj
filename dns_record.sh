@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# ==========================
 # Get Hosted Zone ID
-# ==========================
-
 ZONE_ID=$(aws route53 list-hosted-zones-by-name \
     --dns-name "$DOMAIN" \
     --query "HostedZones[?Name=='$DOMAIN.'].Id | [0]" \
@@ -29,12 +26,7 @@ ZONE_ID=${ZONE_ID#/hostedzone/}
 
 echo "Hosted Zone ID: $ZONE_ID"
 
-
-# ==========================
-# Create Change Batch
-# ==========================
-
-cat > /tmp/record.json <<EOF
+cat >/tmp/record.json <<EOF
 {
   "Comment": "Create/Update A Record",
   "Changes": [
@@ -54,10 +46,6 @@ cat > /tmp/record.json <<EOF
   ]
 }
 EOF
-
-# ==========================
-# Create/Update DNS Record
-# ==========================
 
 aws route53 change-resource-record-sets \
     --hosted-zone-id "$ZONE_ID" \
