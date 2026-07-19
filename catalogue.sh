@@ -39,7 +39,7 @@ VALIDATE $? "Extract Catalogue"
 npm install
 VALIDATE $? "Install NodeJS Dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copy Catalogue Service"
 
 systemctl daemon-reload
@@ -51,7 +51,7 @@ VALIDATE $? "Enable Catalogue Service"
 systemctl start catalogue
 VALIDATE $? "Start Catalogue Service"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copy MongoDB Repo"
 
 dnf install mongodb-mongosh -y
