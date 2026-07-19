@@ -7,11 +7,14 @@ CHECK_ROOT
 
 MONGODB_HOST="mongodb.ayri.fun"
 
-dnf module disable nodejs -y
-VALIDATE $? "Disable NodeJS Default Module"
+# dnf module disable nodejs -y
+# VALIDATE $? "Disable NodeJS Default Module"
 
-dnf module enable nodejs:20 -y
-VALIDATE $? "Enable NodeJS 20 Module"
+# dnf module enable nodejs:20 -y
+# VALIDATE $? "Enable NodeJS 20 Module"
+
+curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+VALIDATE $? "Get NodeJS Version 20"
 
 dnf install nodejs -y
 VALIDATE $? "Install NodeJS"
