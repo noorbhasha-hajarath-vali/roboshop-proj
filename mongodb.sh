@@ -10,6 +10,8 @@ NC='\033[0m'     # No Color
 
 LOG_DIR="/var/log/roboshop_proj"
 SCRIPT_FILE=$(basename "$0" .sh)
+
+mkdir -p $LOG_DIR
 LOG_FILE="$LOG_DIR/$SCRIPT_FILE.log"
 
 echo "Script Started at.. $(date)" | tee -a $LOG_FILE
