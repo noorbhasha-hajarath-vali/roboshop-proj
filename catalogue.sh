@@ -56,14 +56,17 @@ VALIDATE $? "Download Catalogue code"
 cd /app
 VALIDATE $? "Go to app directory"
 
+rm -rf /app/*
+VALIDATE $? "Removing existing code"
+
 unzip /tmp/catalogue.zip &>>$LOG_FILE
-VALIDATE $? "unxip catalogue code"
+VALIDATE $? "Unzip catalogue code"
 
 npm install &>>$LOG_FILE
 VALIDATE $? "Install Depenencies"
 
 cp "$SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
-VALIDATE $? "Install Depenencies"
+VALIDATE $? "Copy Catalogue service file"
 
 systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Reload Deamon"
