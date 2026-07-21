@@ -65,7 +65,7 @@ VALIDATE $? "Unzip catalogue code"
 npm install &>>$LOG_FILE
 VALIDATE $? "Install Depenencies"
 
-cp "$SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "Copy Catalogue service file"
 
 systemctl daemon-reload &>>$LOG_FILE
