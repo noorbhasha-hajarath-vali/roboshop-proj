@@ -7,10 +7,10 @@ for INSTANCE in $@
 do
 # create instance
 INSTANCE_ID=$(aws ec2 run-instances \
-    --image-id ami-0c55b159cbfafe1f0 \
+    --image-id $AMI_ID \
     --instance-type t3.micro \
     --key-name devops \
-    --security-group-ids sg-1a2b3c4d \
+    --security-group-ids $SG_ID \
     --query 'Instances[0].InstanceId' \
     --output text)
 
