@@ -49,8 +49,8 @@ sed -i \
     /etc/redis/redis.conf
 VALIDATE $? "Update redis.conf"
 
-systemctl enable redis
+systemctl enable redis &>>$LOG_FILE
 VALIDATE $? "Enable redis service"
 
-systemctl start redis
+systemctl start redis &>>$LOG_FILE
 VALIDATE $? "Start redis service"
