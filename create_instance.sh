@@ -5,6 +5,12 @@ SG_ID=sg-014ee579326daf5b9
 ZONE_ID=Z0531989124USCH6EH8I9
 DOMAIN_NAME=ayri.fun
 
+LOG_DIR="/var/log/roboshop_proj"
+SCRIPT_FILE=$(basename "$0" .sh)
+
+mkdir -p $LOG_DIR
+LOG_FILE="$LOG_DIR/$SCRIPT_FILE.log"
+
 for INSTANCE in $@
 do
 # create instance
@@ -17,7 +23,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --query 'Instances[0].InstanceId' \
     --output text)
 
-echo "Instance Created Successfully, Instance ID is: $INSTANCE_ID"
+echo "Instance created successfully with instance ID: $INSTANCE_ID" | pee -a $LOG_FILE
 
 if [ $INSTANCE != "frontend" ]; then
     IP=$(aws ec2 describe-instances \
@@ -37,7 +43,7 @@ aws route53 change-resource-record-sets \
     --hosted-zone-id "$ZONE_ID" \
     --change-batch '
     {
-  "Comment": "Updating an A record for the main website",
+  "Comment": "Update A record",
   "Changes": [
     {
       "Action": "UPSERT",
@@ -49,10 +55,14 @@ aws route53 change-resource-record-sets \
           {
             "Value": "'$IP'"
           }
-        ]
-      }
+        ]}
     }
-  ]
-}
-'
+  ]}' | pee -a $LOG_FILE
+  
+if [ $? = 0 ]; then
+  echo "DNS Record Updated Successfully"
+else
+  echo "DNS Record Update Failed"
+fi
+
 done
