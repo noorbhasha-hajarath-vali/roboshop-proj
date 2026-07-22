@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -Eeuo pipefail
-
-trap 'echo "ERROR: Command \"$BASH_COMMAND\" failed at line $LINENO"' ERR
-
 USER_ID=$(id -u)
 SCRIPT_DIR=$(pwd)
 
