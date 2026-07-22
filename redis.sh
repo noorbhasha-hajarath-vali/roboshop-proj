@@ -40,7 +40,7 @@ VALIDATE $? "Disable redis"
 dnf module enable redis:7 -y
 VALIDATE $? "Enable redis 7"
 
-dnf install redis -y
+dnf install redis -y &>>$LOG_FILE
 VALIDATE $? "Install redis"
 
 sed -i \
